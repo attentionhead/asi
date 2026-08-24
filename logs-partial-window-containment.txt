@@ -1,0 +1,38 @@
+Repository: SlopDotCash/asi
+Parent: c9aba7b54dedd647f8bd5f5c7bf6780b1413b676
+Candidate: 4370bb0e8c0050839c8e66b4586a1c80be97c433
+Provider/model/client: openai / gpt-5.6-sol / codex
+
+RED AT PARENT
+
+/Users/zxmini/Sandbox/Slopcash/asi/.venv/bin/python -m pytest tests/test_reference_life_scorecard.py::test_failed_shard_rejects_window_reward_exceeding_partial_total -q -o addopts=""
+
+FF [100%]
+2 failed in 1.68s
+
+switching_two_state: Failed: DID NOT RAISE ValueError
+riverswim: Failed: DID NOT RAISE ValueError
+
+GREEN AT CANDIDATE
+
+.venv/bin/python -m pytest tests/test_reference_life_scorecard.py -q -o addopts=""
+
+66 passed, 1 skipped in 24.06s
+
+.venv/bin/python -m ruff check .
+
+All checks passed!
+
+git diff --check origin/main...HEAD
+
+exit 0
+
+KNOWN BASELINE LIMITATIONS
+
+Full-tree mypy retained the current-main macOS stub error for os.O_TMPFILE in untouched file
+alberta_framework/evaluation/bounded_elastic_matched_runner.py. A broad fast-lane sample reached
+1,697 passes and 34 skips before the 11 Linux-only immutable-publication tests tracked by issue
+#2251 failed on macOS. The candidate does not touch that module or its tests.
+
+alberta-evidence-status retained exit 2 from current registered-source drift. This candidate
+does not alter a registered evidence source, evidence artifact, threshold, seed, or claim.
