@@ -1,0 +1,35 @@
+Baseline: c9aba7b54dedd647f8bd5f5c7bf6780b1413b676
+Candidate: 62ce4ee7f78d704e4e2adc05682b89a2d638afdf
+
+RED — test added, production guard absent
+$ .venv/bin/python -m pytest tests/test_statistics_validation.py -q -o addopts='' -k test_non_matrix_input_rejected
+FFF                                                                      [100%]
+rank 0: IndexError: tuple index out of range
+rank 1: Failed: DID NOT RAISE ValueError
+rank 3: Failed: DID NOT RAISE ValueError
+3 failed, 239 deselected in 1.05s
+
+GREEN — candidate
+$ .venv/bin/python -m pytest tests/test_statistics_validation.py tests/test_utils_smoke.py tests/test_experiments_validation.py -q -o addopts=''
+401 passed, 3 warnings in 3.87s
+
+$ .venv/bin/python -m pytest tests/test_visualization_grid_cap.py tests/test_continual_metrics.py -q -o addopts=''
+54 passed in 0.38s
+
+$ .venv/bin/ruff check .
+All checks passed!
+
+$ .venv/bin/python -m mypy alberta_framework/utils/statistics.py
+Success: no issues found in 1 source file
+
+$ git diff --check origin/main...HEAD
+exit 0
+
+Full-tree mypy was also run and retains the current-main macOS typing error:
+alberta_framework/evaluation/bounded_elastic_matched_runner.py:1111:
+Module has no attribute "O_TMPFILE" [attr-defined]
+This file is unchanged by the candidate and the result is not claimed green.
+
+The three pytest warnings in the 401-test command are pre-existing: one
+np.longdouble overflow warning in experiments validation and two SciPy
+precision-loss warnings for constant paired samples.
