@@ -1,0 +1,26 @@
+BASE REPRODUCTION
+base=c9aba7b54dedd647f8bd5f5c7bf6780b1413b676
+canonical 7.0 4.0
+accepted_corruption -1.0 9.0
+
+MEASURED HEAD
+0eaac3b0780438d8a2bad0783d01eb6a384277dc
+
+FOCUSED AND ADJACENT TESTS
+........................................................................ [ 53%]
+..............................................................           [100%]
+134 passed in 14.78s
+
+REPOSITORY RUFF
+All checks passed!
+
+CHANGED-SOURCE MYPY
+Success: no issues found in 1 source file
+
+DIFF CHECK
+passed
+
+REPOSITORY MYPY, KNOWN MAIN FAILURE
+alberta_framework/evaluation/bounded_elastic_matched_runner.py:1111: error: Module has no attribute "O_TMPFILE"  [attr-defined]
+Found 1 error in 1 file (checked 224 source files)
+repository_mypy_exit=1
