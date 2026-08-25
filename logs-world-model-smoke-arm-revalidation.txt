@@ -1,0 +1,50 @@
+ASI trusted-main audit: world-model smoke arm revalidation
+UTC verification completed: 2026-08-25T05:27:55Z
+Base: c9aba7b54dedd647f8bd5f5c7bf6780b1413b676
+Candidate: 161b9e2d3cc4bfc76a12435bfc6b0526823e711c
+
+Red phase on exact base
+-----------------------
+Command: .venv/bin/python -m pytest tests/test_world_model_qualification.py -q
+Result: 3 failed, 7 passed
+
+The regressions demonstrated that WorldModelSmokeResult accepted already-frozen nested arms
+whose validated fields had been replaced after construction, accepted a metric space outside
+the frozen arm roster, and accepted arm step counts that disagreed with the outer result.
+
+Green phase on exact candidate
+------------------------------
+Command: .venv/bin/python -m pytest tests/test_world_model_qualification.py -q
+Result: 10 passed
+
+Command: .venv/bin/python -m pytest tests/test_world_model_qualification.py tests/test_world_model.py tests/test_latent_world_model.py tests/test_ftl_world_model.py -q
+Result: 173 passed
+
+Command: .venv/bin/python -m ruff check alberta_framework/benchmarks/world_model_qualification.py tests/test_world_model_qualification.py
+Result: passed
+
+Command: .venv/bin/python -m mypy alberta_framework/benchmarks/world_model_qualification.py
+Result: passed
+
+Command: .venv/bin/python -m ruff check .
+Result: passed
+
+Command: .venv/bin/python -m mypy
+Result: retained the unchanged current-main macOS stub error at
+alberta_framework/evaluation/bounded_elastic_matched_runner.py:1111 because os.O_TMPFILE is
+absent from the platform type stub. Repository-wide mypy is not claimed green.
+
+Command: git diff --check HEAD^
+Result: passed
+
+Overlap and evidence checks
+---------------------------
+The complete live report scanned 57 open issues and 305 open pull requests. Exact semantic
+issue and pull-request searches found no match. A complete open-pull-request file inventory
+contained no change to either modified file. Neither modified file is registered in the frozen
+evidence manifest.
+
+Claim boundary
+--------------
+This is a development-only measurement-integrity fix. It changes no benchmark arm, seed,
+threshold, output artifact, or promoted evidence, and it establishes no performance result.
