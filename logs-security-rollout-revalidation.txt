@@ -1,0 +1,47 @@
+ASI security rollout validator reproduction and verification
+
+Baseline: c9aba7b54dedd647f8bd5f5c7bf6780b1413b676
+Candidate: 84359ed6deae2de787096b96581885dad533a51d
+Provider: openai
+Model: gpt-5.6-sol
+Client: codex
+
+Baseline reproduction
+---------------------
+Constructed a valid SecurityRolloutStep, replaced its frozen reward field with
+float("nan") through object.__setattr__, and passed the record to
+validate_security_rollout. The validator returned normally and printed:
+
+validator_accepted_nonfinite_reward True
+
+Failing-test-first result on baseline behavior
+----------------------------------------------
+.venv/bin/python -m pytest tests/test_security_rollout_leftover_identities.py -q -o addopts=""
+..FFFF                                                                   [100%]
+4 failed, 2 passed in 0.55s
+
+The four failures showed that mutated reward, action, terminated, and state
+fields were all accepted without an exception.
+
+Candidate verification
+----------------------
+.venv/bin/python -m pytest tests/test_security_rollout_leftover_identities.py -q -o addopts=""
+......                                                                   [100%]
+6 passed in 0.50s
+
+.venv/bin/python -m pytest tests/test_security_integration.py tests/test_security_hostile_validation.py tests/test_security_oracle_leftover_identities.py tests/test_security_oracle_label_hostile.py tests/test_security_reward_weight_leftover_identities.py -q -o addopts=""
+.........................................................                [100%]
+57 passed in 0.55s
+
+.venv/bin/python -m pytest tests/test_security*.py -q -o addopts=""
+...............................................................          [100%]
+63 passed in 0.68s
+
+.venv/bin/python -m ruff check .
+All checks passed!
+
+.venv/bin/python -m mypy alberta_framework/security.py
+Success: no issues found in 1 source file
+
+git diff --check
+exit 0
