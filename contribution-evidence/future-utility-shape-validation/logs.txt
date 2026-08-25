@@ -1,0 +1,52 @@
+ASI Fix evidence: future-utility shape validation
+
+Trusted base: c9aba7b54dedd647f8bd5f5c7bf6780b1413b676
+Candidate: ee703368cd48911475b9ce305b619f37ec6a06ca
+Lane: Fix; causal future-utility estimator integrity
+
+Red reproduction on the trusted base
+
+Command:
+  .venv/bin/python -m pytest tests/test_future_utility.py -q -k \
+    'rejects_activity_mask_task_axis_broadcast or \
+     contribution_trace_rejects_task_axis_broadcast or \
+     factored_trace_rejects_task_axis_broadcast'
+
+Result:
+  3 failed, 42 deselected
+  Each failure reported that the expected ValueError was not raised.
+
+The direct probe supplied two task residuals with a one-task activity mask or
+retained trace. All three estimators returned update_applied=True. The one-step
+estimator broadcast to shape (2, 3); the contribution estimator changed a
+(1, 3) retained trace to (2, 3); and the factored estimator changed a (1,)
+error trace to (2,).
+
+Candidate verification
+
+Commands and results:
+  .venv/bin/python -m pytest tests/test_future_utility.py -q
+    45 passed
+  .venv/bin/python -m pytest tests/test_future_utility.py \
+    tests/test_future_utility_mode_hostile.py tests/test_feature_discovery.py \
+    tests/test_compositional_features.py \
+    tests/test_compositional_feature_scalar_residuals.py -q
+    283 passed
+  .venv/bin/python -m pytest tests/test_interaction_feature_horizon.py \
+    tests/test_interaction_feature_loop_steps.py \
+    tests/test_interaction_feature_validation.py \
+    tests/test_interaction_features_candidate_str_hostile.py \
+    tests/test_interaction_features_update_working_set.py -q
+    84 passed
+  .venv/bin/python -m ruff check .
+    All checks passed
+  .venv/bin/python -m mypy alberta_framework/core/future_utility.py
+    Success: no issues found in 1 source file
+  .venv/bin/python -m mypy
+    Retained the unchanged trusted-main macOS os.O_TMPFILE stub error at
+    alberta_framework/evaluation/bounded_elastic_matched_runner.py:1111.
+  git diff --check
+    passed
+
+No benchmark, seed, threshold, output artifact, or evidence claim changed.
+The modified source is not registered by the five-claim evidence manifest.

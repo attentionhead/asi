@@ -1,0 +1,20 @@
+{
+  "artifact_type": "asi_fix_reproduction",
+  "base_sha": "c9aba7b54dedd647f8bd5f5c7bf6780b1413b676",
+  "candidate_sha": "ee703368cd48911475b9ce305b619f37ec6a06ca",
+  "component": "alberta_framework.core.future_utility",
+  "defect": "task-axis broadcasting silently changed retained estimator state shape",
+  "baseline": {
+    "activity_mask_shape": [1],
+    "errors_shape": [2],
+    "returned_reductions_shape": [2, 3],
+    "returned_update_applied": true,
+    "retained_contribution_trace_shape_before": [1, 3],
+    "retained_contribution_trace_shape_after": [2, 3],
+    "retained_error_trace_shape_before": [1],
+    "retained_error_trace_shape_after": [2]
+  },
+  "candidate_behavior": "rejects mismatched task, feature, trace, mask, and scalar axes before estimator math",
+  "evidence_tier": "development_fix_nonpromoting",
+  "registered_evidence_source_changed": false
+}
