@@ -1,0 +1,36 @@
+Baseline: c9aba7b54dedd647f8bd5f5c7bf6780b1413b676
+Candidate: fad98ecdc320dcd74b168b73eb985e0978b0182e
+
+Failing-test-first baseline command:
+/Users/zxmini/Sandbox/Slopcash/asi/.venv/bin/python -m pytest tests/test_recurring_ipmnist_retention.py::test_report_builder_revalidates_frozen_trace_values -q -o addopts=""
+
+Baseline result:
+FAILED tests/test_recurring_ipmnist_retention.py::test_report_builder_revalidates_frozen_trace_values
+Failed: DID NOT RAISE ValueError
+1 failed in 0.87s
+
+Candidate focused regression:
+.venv/bin/python -m pytest tests/test_recurring_ipmnist_retention.py::test_report_builder_revalidates_frozen_inputs -q -o addopts=""
+1 passed in 0.53s
+
+Candidate focused modules:
+.venv/bin/python -m pytest tests/test_recurring_ipmnist_retention.py tests/test_recurring_ipmnist_retention_hostile_validation.py -q -o addopts=""
+21 passed in 0.45s
+
+Candidate lint:
+.venv/bin/python -m ruff check .
+All checks passed!
+
+Candidate changed-source typing:
+.venv/bin/python -m mypy alberta_framework/evaluation/recurring_ipmnist_retention.py
+Success: no issues found in 1 source file
+
+Repository-wide typing:
+.venv/bin/python -m mypy
+alberta_framework/evaluation/bounded_elastic_matched_runner.py:1111: error: Module has no attribute "O_TMPFILE" [attr-defined]
+Found 1 error in 1 file (checked 224 source files)
+This is the unchanged current-main macOS platform-stub failure.
+
+Candidate diff integrity:
+git diff --check
+exit 0
